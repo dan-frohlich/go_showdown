@@ -15,13 +15,16 @@ func (w *Weapon) Damage() Damage { return w.Damage_ }
 
 type RangedWeapon struct {
 	Weapon
-	RangeBand_ RangeBand `json:"range_band" yaml:"range_band"`
+	RangeBand_ RangeBand `json:"range" yaml:"range"`
 }
+
+//Ranged
+func (w *RangedWeapon) Range() RangeBand { return w.RangeBand_}
 
 func (u *Weapon) MarshalJSON() ([]byte, error) {
 	type Alias Weapon
 
-	log.Printf("marshaling %v\n", u)
+	//log.Printf("marshaling %v\n", u)
 	b, e := json.Marshal(&struct {
 		Damage_ string `json:"damage"`
 		*Alias
@@ -30,7 +33,7 @@ func (u *Weapon) MarshalJSON() ([]byte, error) {
 		Alias:        (*Alias)(u),
 	})
 
-	log.Printf("marshaled %v, %v\n", string(b), e)
+	//log.Printf("marshaled %v, %v\n", string(b), e)
 	return b, e
 }
 
@@ -55,7 +58,7 @@ func (u *Weapon) UnmarshalJSON(data []byte) error {
 		log.Printf("failed to parse aux damage %v\n", aux.Damage_)
 		return err
 	}
-	log.Printf("parsed aux damage %s\n", d)
+	//log.Printf("parsed aux damage %s\n", d)
 	u.Damage_ = d
 	return nil
 }
@@ -65,7 +68,7 @@ func (u *RangedWeapon) MarshalJSON() ([]byte, error) {
 
 	log.Printf("marshaling %v\n", u)
 	b, e := json.Marshal(&struct {
-		RangeBand_ string `json:"damage"`
+		RangeBand_ string `json:"range"`
 		*Alias
 	}{
 		RangeBand_:      u.RangeBand_.String(),
@@ -80,11 +83,15 @@ func (u *RangedWeapon) UnmarshalJSON(data []byte) error {
 	log.Printf("unmarshaling %v\n", string(data))
 	type Alias RangedWeapon
 	aux := &struct {
-		RangeBand_ string `json:"damage"`
+		RangeBand_ string `json:"range"`
 		*Alias
 	}{
 		Alias: (*Alias)(u),
 	}
+
+	log.Printf("read Item: %v ", aux.Weapon.Item)
+	log.Printf("read weapon: %v ", aux.Weapon)
+	log.Printf("read range: %s ", aux.RangeBand_)
 
 	if err := json.Unmarshal(data, &aux); err != nil {
 		log.Printf("failed to unmarshal into aux struxt %v\n", aux)

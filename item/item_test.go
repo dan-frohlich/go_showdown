@@ -26,7 +26,9 @@ func TestItemReadWrite(t *testing.T) {
 	if pi.Name() != pi2.Name() {
 		t.Errorf("got %s when expecting %s", pi2.Name(), pi.Name())
 	}
+}
 
+func TestItemReadYaml(t *testing.T) {
 	src_yml := `
 id: 0-00-000-0
 name: pitem

@@ -8,17 +8,17 @@ import (
 )
 
 type RangeBand struct {
-	Short_ int
+	short int
 }
 
 func (rb RangeBand) Short() int {
-	return rb.Short_
+	return rb.short
 }
 
 func (rb RangeBand) String() string {
-	s := rb.Short_
-	m := 2 * rb.Short_
-	l := 3 * rb.Short_
+	s := rb.short
+	m := 2 * rb.short
+	l := 3 * rb.short
 	return fmt.Sprintf("%d/%d/%d", s, m, l)
 }
 

@@ -21,7 +21,7 @@ type Damaging interface {
 
 type Ranged interface {
 	Damaging
-	RangeBand() string
+	Range() string
 }
 
 type Item struct {

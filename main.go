@@ -16,12 +16,12 @@ func main() {
 
 	pw := item.Weapon{
 		Item:item.Item{Cost_:0, Name_:"pweap"},
-		Damage:"2d6"}
+		Damage_:"2d6"}
 	pwj, _ := json.Marshal(pw)
 	log.Printf("json pw: %s\n", pwj)
 
 	prw := item.RangedWeapon{
-		Weapon:item.Weapon{Damage:"2d6",
+		Weapon:item.Weapon{Damage_:"2d6",
 			Item:item.Item{Cost_:0, Name_:"prngweap"},
 		},
 		RangeBand:"12/24/48"}

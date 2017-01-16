@@ -9,21 +9,20 @@ import (
 
 func main() {
 
-
 	//hack to see how items are marshaled in json and yml
-	pi := item.Item{Name:"pitem", Cost:0}
+	pi := item.Item{Name_:"pitem", Cost_:0}
 	pij, _ := json.Marshal(pi)
 	log.Printf("json pi: %s\n", pij)
 
 	pw := item.Weapon{
-		Item:item.Item{Cost:0, Name:"pweap"},
+		Item:item.Item{Cost_:0, Name_:"pweap"},
 		Damage:"2d6"}
 	pwj, _ := json.Marshal(pw)
 	log.Printf("json pw: %s\n", pwj)
 
 	prw := item.RangedWeapon{
 		Weapon:item.Weapon{Damage:"2d6",
-			Item:item.Item{Cost:0, Name:"prngweap"},
+			Item:item.Item{Cost_:0, Name_:"prngweap"},
 		},
 		RangeBand:"12/24/48"}
 	prwj, _ := json.Marshal(prw)

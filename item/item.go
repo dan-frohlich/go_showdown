@@ -21,11 +21,18 @@ type Ranged interface {
 }
 
 type Item struct {
-	ID string `json:"id"`
-	Name string `json:"name"`
-	Description string `json:"description"`
-	Cost int `json:"cost"`
+	ID_          string `json:"id" yaml:"id"`
+	Name_        string `json:"name" yaml:"name"`
+	Description_ string `json:"description" yaml:"description"`
+	Cost_        int `json:"cost" yaml:"cost"`
 }
+
+//Named
+func (i *Item) Name() string { return i.Name_ }
+
+func (i *Item) Description() string { return i.Description_ }
+
+func (i *Item) Cost() int { return i.Cost_ }
 
 type Weapon struct {
 	Item

@@ -13,14 +13,6 @@ type Weapon struct {
 //Damaging
 func (w *Weapon) Damage() Damage { return w.Damage_ }
 
-type RangedWeapon struct {
-	Weapon
-	RangeBand_ RangeBand `json:"range" yaml:"range"`
-}
-
-//Ranged
-func (w *RangedWeapon) Range() RangeBand { return w.RangeBand_}
-
 func (u *Weapon) MarshalJSON() ([]byte, error) {
 	type Alias Weapon
 
@@ -38,7 +30,9 @@ func (u *Weapon) MarshalJSON() ([]byte, error) {
 }
 
 func (u *Weapon) UnmarshalJSON(data []byte) error {
-	log.Printf("unmarshaling %v\n", string(data))
+	defer log.Printf("unmarshaled Weapon as %v\n", u)
+
+	log.Printf("unmarshaling Weapon %v\n", string(data))
 	type Alias Weapon
 	aux := &struct {
 		Damage_ string `json:"damage"`
@@ -51,7 +45,7 @@ func (u *Weapon) UnmarshalJSON(data []byte) error {
 		log.Printf("failed to unmarshal into aux struxt %v\n", aux)
 		return err
 	}
-	log.Printf("unmarshaled aux struxt %v\n", aux)
+	log.Printf("unmarshaled aux struxt for Weapon %v - %v\n", aux.Damage_, aux.Alias)
 
 	d, err := ParseDamage(aux.Damage_)
 	if err != nil {
@@ -63,48 +57,3 @@ func (u *Weapon) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-func (u *RangedWeapon) MarshalJSON() ([]byte, error) {
-	type Alias RangedWeapon
-
-	log.Printf("marshaling %v\n", u)
-	b, e := json.Marshal(&struct {
-		RangeBand_ string `json:"range"`
-		*Alias
-	}{
-		RangeBand_:      u.RangeBand_.String(),
-		Alias:           (*Alias)(u),
-	})
-
-	log.Printf("marshaled %v, %v\n", string(b), e)
-	return b, e
-}
-
-func (u *RangedWeapon) UnmarshalJSON(data []byte) error {
-	log.Printf("unmarshaling %v\n", string(data))
-	type Alias RangedWeapon
-	aux := &struct {
-		RangeBand_ string `json:"range"`
-		*Alias
-	}{
-		Alias: (*Alias)(u),
-	}
-
-	log.Printf("read Item: %v ", aux.Weapon.Item)
-	log.Printf("read weapon: %v ", aux.Weapon)
-	log.Printf("read range: %s ", aux.RangeBand_)
-
-	if err := json.Unmarshal(data, &aux); err != nil {
-		log.Printf("failed to unmarshal into aux struxt %v\n", aux)
-		return err
-	}
-	log.Printf("unmarshaled aux struxt %v\n", aux)
-
-	rb, err := ParseRangeBand(aux.RangeBand_)
-	if err != nil {
-		log.Printf("failed to parse aux range band %v\n", aux.RangeBand_)
-		return err
-	}
-	log.Printf("parsed aux range band %s\n", rb)
-	u.RangeBand_ = rb
-	return nil
-}

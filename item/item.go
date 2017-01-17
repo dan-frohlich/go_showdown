@@ -17,11 +17,13 @@ type Costly interface {
 type Damaging interface {
 	Costly
 	Damage() string
+	ArmorPiercing() int
 }
 
 type Ranged interface {
 	Damaging
 	Range() string
+	RateOfFire() int
 }
 
 type Item struct {

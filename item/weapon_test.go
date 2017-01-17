@@ -4,8 +4,6 @@ import (
 	"testing"
 	"encoding/json"
 	"github.com/ghodss/yaml"
-	"log"
-	"fmt"
 )
 
 func TestWeaponReadWrite(t *testing.T) {
@@ -39,6 +37,7 @@ name: pitem
 description: pidescr
 cost: 101
 damage: 2d6
+AP: 111
 `
 
 	pi3 := &Weapon{}
@@ -47,45 +46,32 @@ damage: 2d6
 		t.Error(pi3_umerror)
 	}
 
-	if pi3.Cost_ != 101 ||
-			pi3.ID_ != "0-00-000-0" ||
-			pi3.Name_ != "pitem" ||
-			pi3.Description_ != "pidescr" ||
-			pi3.Damage().String() != "2d6" {
-		t.Errorf("got %s from %s", pi3, src_yml)
-	}
-}
-
-func TestRangedWeaponReadYaml(t *testing.T) {
-	//t.Skip("skipping test;")
-
-	log.Printf("running TestRangedWeaponReadYaml")
-	src_yml := `
-id: 0-00-000-0
-name: pistol
-description: typical pistol
-cost: 2
-damage: 2d6
-range: 12/24/48
-`
-
-	pi3 := &RangedWeapon{}
-	pi3_umerror := yaml.Unmarshal([]byte(src_yml), pi3)
-	if pi3_umerror != nil {
-		t.Error(pi3_umerror)
+	format := "expected %v for %s but found %v"
+	if 101 != pi3.Cost() {
+		t.Errorf(format, 101, "cost", pi3.Cost())
 	}
 
-	field_assertion("cost", 2, pi3.Cost_)
-	field_assertion("id", "0-00-000-0", pi3.ID_)
-	field_assertion("name", "pistol", pi3.Name_)
-	field_assertion("description", "typical pistol", pi3.Description_)
-	field_assertion("damage", "2d6", pi3.Damage_.String())
-	field_assertion("max damage", 12, pi3.Damage_.Max())
-	field_assertion("range fields", "12/24/48", pi3.Range_.String())
-}
+	if "0-00-000-0" != pi3.ID() {
+		t.Errorf(format, "0-00-000-0", "id", pi3.ID())
+	}
 
-func field_assertion(field string, expected interface{}, actual interface{} ){
-	if expected != actual {
-		fmt.Errorf("expected %s of %v but found %v", field, expected, actual)
+	if "pitem" != pi3.Name() {
+		t.Errorf(format, "pitem", "name", pi3.Name())
+	}
+
+	if "pidescr" != pi3.Description() {
+		t.Errorf(format, "pidescr", "description", pi3.Description())
+	}
+
+	if "2d6" != pi3.Damage_.String() {
+		t.Errorf(format, "2d6", "damage", pi3.Damage_.String())
+	}
+
+	if 111 != pi3.ArmorPiercing() {
+		t.Errorf(format, 111, "AP", pi3.ArmorPiercing())
+	}
+
+	if 12 != pi3.Damage_.Max() {
+		t.Errorf(format, 12, "max damage", pi3.Damage_.Max())
 	}
 }

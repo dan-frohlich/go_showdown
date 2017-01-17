@@ -18,7 +18,7 @@ func (rb Range) Short() int {
 func (rb Range) String() string {
 	s := rb.short
 	m := 2 * rb.short
-	l := 3 * rb.short
+	l := 4 * rb.short
 	return fmt.Sprintf("%d/%d/%d", s, m, l)
 }
 

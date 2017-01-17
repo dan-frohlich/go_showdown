@@ -5,29 +5,34 @@ import (
 	"encoding/json"
 	//"errors"
 	"errors"
+	"fmt"
+	"reflect"
 )
 
 type RangedWeapon struct {
 	Weapon
 	Range_ Range `json:"range" yaml:"range"`
+	RoF_   int `json:"RoF" yaml:"RoF"`
 }
 
 //Ranged
 func (w *RangedWeapon) Range() Range { return w.Range_ }
 
+func (w *RangedWeapon) RateOfFire() int { return w.RoF_ }
+
 func (u *RangedWeapon) MarshalJSON() ([]byte, error) {
 	type Alias RangedWeapon
 
-	log.Printf("marshaling %v\n", u)
+	//log.Printf("marshaling %v\n", u)
 	b, e := json.Marshal(&struct {
 		Range_ string `json:"range"`
 		*Alias
 	}{
-		//Range_:      u.Range_.String(),
+		Range_:          u.Range_.String(),
 		Alias:           (*Alias)(u),
 	})
 
-	log.Printf("marshaled %v, %v\n", string(b), e)
+	//log.Printf("marshaled %v, %v\n", string(b), e)
 	return b, e
 }
 
@@ -36,7 +41,7 @@ func (u *RangedWeapon) UnmarshalJSON(data []byte) error {
 }
 
 func (u *RangedWeapon) unmarshalJSONTheDorkyWay(data []byte) error {
-	defer log.Printf("unmarshaled RangedWeapon as %v\n", u)
+	//defer log.Printf("unmarshaled RangedWeapon as %v\n", u)
 
 	var stuff map[string]interface{}
 	var weapon_ Weapon
@@ -53,19 +58,30 @@ func (u *RangedWeapon) unmarshalJSONTheDorkyWay(data []byte) error {
 		return err
 	}
 
-	var err error
-	range_string_, ok  := stuff["range"].(string)
-	if ok {
-		u.Range_, err = ParseRangeBand(range_string_ )
-		if err != nil {
-			log.Printf("failed to parse aux range band %v\n", range_string_ )
+	if range_string_, ok := stuff["range"].(string); ok {
+		var err error
+		if u.Range_, err = ParseRangeBand(range_string_); err != nil {
+			log.Printf("failed to parse aux range band %v\n", range_string_)
 			return err
 		}
-	}else{
+	} else {
 		return errors.New("range must be a string")
 	}
 
-	log.Printf("found %v - %v\n", 	weapon_	, stuff)
+	rof_interface := stuff["RoF"]
+	if rof_interface != nil {
+		if rof_int, ok := rof_interface.(float64); ok {
+			u.RoF_ = int(rof_int)
+		} else {
+			message := fmt.Sprintf("RoF [%v] must be an int but was %v",
+				rof_interface, reflect.TypeOf(rof_interface))
+			return errors.New(message)
+		}
+	} else {
+		u.RoF_ = 1 //default to RoF 1
+	}
+
+	//log.Printf("found %v - %v\n", weapon_, stuff)
 	return nil
 }
 

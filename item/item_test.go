@@ -42,10 +42,21 @@ cost: 101
 		t.Error(pi3_umerror)
 	}
 
-	if pi3.Cost() != 101 ||
-			pi3.ID_ != "0-00-000-0" ||
-			pi3.Name() != "pitem" ||
-			pi3.Description() != "pidescr" {
-		t.Errorf("got %s from %s", pi3, src_yml)
+	format := "expected %v for %s but found %v"
+	if 101 != pi3.Cost() {
+		t.Errorf(format, 101, "cost", pi3.Cost())
 	}
+
+	if "0-00-000-0" != pi3.ID() {
+		t.Errorf(format, "0-00-000-0", "id", pi3.ID())
+	}
+
+	if "pitem" != pi3.Name() {
+		t.Errorf(format, "pitem", "name", pi3.Name())
+	}
+
+	if "pidescr" != pi3.Description() {
+		t.Errorf(format, "pidescr", "description", pi3.Description())
+	}
+
 }

@@ -8,10 +8,13 @@ import (
 type Weapon struct {
 	Item
 	Damage_ Damage `json:"damage" yaml:"damage"`
+	AP_ int `json:"AP" yaml:"AP"`
 }
 
 //Damaging
 func (w *Weapon) Damage() Damage { return w.Damage_ }
+
+func (w *Weapon) ArmorPiercing() int { return w.AP_ }
 
 func (u *Weapon) MarshalJSON() ([]byte, error) {
 	type Alias Weapon
@@ -30,9 +33,9 @@ func (u *Weapon) MarshalJSON() ([]byte, error) {
 }
 
 func (u *Weapon) UnmarshalJSON(data []byte) error {
-	defer log.Printf("unmarshaled Weapon as %v\n", u)
+	//defer log.Printf("unmarshaled Weapon as %v\n", u)
 
-	log.Printf("unmarshaling Weapon %v\n", string(data))
+	//log.Printf("unmarshaling Weapon %v\n", string(data))
 	type Alias Weapon
 	aux := &struct {
 		Damage_ string `json:"damage"`
@@ -45,7 +48,7 @@ func (u *Weapon) UnmarshalJSON(data []byte) error {
 		log.Printf("failed to unmarshal into aux struxt %v\n", aux)
 		return err
 	}
-	log.Printf("unmarshaled aux struxt for Weapon %v - %v\n", aux.Damage_, aux.Alias)
+	//log.Printf("unmarshaled aux struxt for Weapon %v - %v\n", aux.Damage_, aux.Alias)
 
 	d, err := ParseDamage(aux.Damage_)
 	if err != nil {

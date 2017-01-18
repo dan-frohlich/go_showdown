@@ -17,28 +17,28 @@ name: Leg O'Lamb
 description: Elf archer
 notes: snowboarder
 attributes:
-  showdown.v2009.arrtibute.agility:
-    id: showdown.v2009.arrtibute.agility
+  showdown.v2009.attribute.agility:
+    id: showdown.v2009.attribute.agility
     name: Agility
     short_name: Agi
     level: 12
-  showdown.v2009.arrtibute.spirit:
-    id: showdown.v2009.arrtibute.spirit
+  showdown.v2009.attribute.spirit:
+    id: showdown.v2009.attribute.spirit
     name: Spirit
     short_name: Spi
     level: 8
-  showdown.v2009.arrtibute.smarts:
-    id: showdown.v2009.arrtibute.smarts
+  showdown.v2009.attribute.smarts:
+    id: showdown.v2009.attribute.smarts
     name: Smarts
     short_name: Sma
     level: 8
-  showdown.v2009.arrtibute.strength:
-    id: showdown.v2009.arrtibute.strength
+  showdown.v2009.attribute.strength:
+    id: showdown.v2009.attribute.strength
     name: Strength
     short_name: Str
     level: 6
-  showdown.v2009.arrtibute.vigor:
-    id: showdown.v2009.arrtibute.vigor
+  showdown.v2009.attribute.vigor:
+    id: showdown.v2009.attribute.vigor
     name: Vigor
     short_name: Vig
     level: 8

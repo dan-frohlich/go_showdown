@@ -1,8 +1,8 @@
 package item
 
 import (
-	"testing"
 	"github.com/ghodss/yaml"
+	"testing"
 )
 
 func TestArmorParse(t *testing.T) {

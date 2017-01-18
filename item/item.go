@@ -1,65 +1,37 @@
 package item
 
-type Identifiable interface {
-	ID() string
-}
+type ID string
 
-type Named interface {
-	Name() string
-	Description() string
-	Notes() string
-}
-
-type Costly interface {
-	Named
-	Cost() int
-	SpecialCost() int
-}
-
-type Damaging interface {
-	Costly
-	Damage() string
-	ArmorPiercing() int
-}
-
-type Ranged interface {
-	Damaging
-	Range() string
-	RateOfFire() int
-}
-
-type Hand interface {
-	Damaging
-	Parry() int
-	Reach() int
-}
-
-type Armored interface {
-	Costly
-	Armor() int
-	Parry() int
-}
-
-type Item struct {
-	ID_          string `json:"id" yaml:"id"`
+type Element struct {
+	ID_          ID     `json:"id" yaml:"id"`
 	Name_        string `json:"name" yaml:"name"`
+	Short_Name_  string `json:"short_name" yaml:"short_name"`
 	Description_ string `json:"description" yaml:"description"`
-	Cost_        int    `json:"cost" yaml:"cost"`
-	SpecialCost_ int    `json:"special_cost" yaml:"special_cost"`
 	Notes_       string `json:"notes" yaml:"notes"`
 }
 
-//Named
-func (i *Item) Name() string { return i.Name_ }
-
-func (i *Item) Description() string { return i.Description_ }
-
-func (i *Item) Notes() string { return i.Notes_ }
+type Item struct {
+	Element
+	Count_       int `json:"count" yaml:"count"`
+	Cost_        int `json:"cost" yaml:"cost"`
+	SpecialCost_ int `json:"special_cost" yaml:"special_cost"`
+}
 
 //Identifiable
-func (i *Item) ID() string { return i.ID_ }
+func (i *Element) ID() ID { return i.ID_ }
+
+//Named
+func (i *Element) Name() string { return i.Name_ }
+
+func (i *Element) ShortName() string { return i.Short_Name_ }
+
+func (i *Element) Description() string { return i.Description_ }
+
+func (i *Element) Notes() string { return i.Notes_ }
 
 //Costly
-func (i *Item) Cost() int { return i.Cost_ }
+func (i *Item) Cost() int {
+	return i.Cost_
+}
 
 func (i *Item) SpecialCost() int { return i.SpecialCost_ }

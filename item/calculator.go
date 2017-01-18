@@ -4,18 +4,6 @@ import (
 	"math"
 )
 
-type HandWeaponCalculator interface {
-	CalculateHandWeaponCost(w HandWeapon) int
-}
-
-type RangedWeaponCalculator interface {
-	CalculateRangedWeaponCost(w RangedWeapon) int
-}
-
-type ArmorCalculator interface {
-	CalculateArmorCost(a Armor) int
-}
-
 type Showdown2009Calculator struct {
 }
 
@@ -71,7 +59,7 @@ func (c Showdown2009Calculator) CalculateRangedWeaponCost(w RangedWeapon) int {
 	}
 	//log.Printf("cost for ranged weapon [%s] B:%d (B/6):%d C:%d D:%d E:%d F:%d",
 	//	w.Name(), B, roundToInt((float64(B) / float64(6)) +.5), C, D, E, F)
-	baseCost := (2 + roundToInt((float64(B) / float64(6)) + .5) ) + (C - 10) + ((D - 1) * 10) + (E * 3) + F
+	baseCost := (2 + roundToInt((float64(B)/float64(6))+.5)) + (C - 10) + ((D - 1) * 10) + (E * 3) + F
 	return roundToInt(float64(baseCost) * oneShotFactor)
 
 	//Cost	Special Modifier

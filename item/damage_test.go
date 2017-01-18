@@ -6,23 +6,117 @@ import (
 
 func TestDamageParse(t *testing.T) {
 
+	format := "expected %v for %s but found %v"
+
 	twoD6 := "2d6"
 
 	damage, err := ParseDamage(twoD6)
 	if err != nil {
 		t.Errorf("parsing %s, error: %v", twoD6, err)
 	}
-	if damage.damage_bonus != 0 {
-		t.Errorf("parsing %s, parsed bonus damage: %s", twoD6, damage.damage_bonus)
+
+	actual := damage.damage_bonus
+	expected := 0
+	if actual != expected {
+		t.Errorf(format, expected, "damage bonus", actual)
 	}
-	if damage.dice_count != 2 {
-		t.Errorf("parsing %s, parsed dice count: %s", twoD6, damage.dice_count)
+
+	actual = damage.dice_count
+	expected = 2
+	if actual != expected {
+		t.Errorf(format, expected, "dice count", actual)
 	}
-	if damage.dice_sides != 6 {
-		t.Errorf("parsing %s, parsed dice sides: %s", twoD6, damage.dice_sides)
+
+	actual = damage.dice_sides
+	expected = 6
+	if actual != expected {
+		t.Errorf(format, expected, "dice sides", actual)
 	}
-	if damage.base_stat != "" {
-		t.Errorf("parsing %s, parsed base stat: %s", twoD6, damage.base_stat)
+
+	actual_s := damage.base_stat
+	expected_s := ""
+	if actual_s != expected_s {
+		t.Errorf(format, expected_s, "base stat", actual_s)
+	}
+
+	actual = damage.Max()
+	expected = 12
+	if actual != expected {
+		t.Errorf(format, expected, "damage max", actual)
+	}
+
+	sword := "Str+d8+1"
+
+	damage, err = ParseDamage(sword)
+	if err != nil {
+		t.Errorf("parsing %s, error: %v", sword, err)
+	}
+
+	actual = damage.damage_bonus
+	expected = 1
+	if actual != expected {
+		t.Errorf(format, expected, "damage bonus", actual)
+	}
+
+	actual = damage.dice_count
+	expected = 1
+	if actual != expected {
+		t.Errorf(format, expected, "dice count", actual)
+	}
+
+	actual = damage.dice_sides
+	expected = 8
+	if actual != expected {
+		t.Errorf(format, expected, "dice sides", actual)
+	}
+
+	actual_s = damage.base_stat
+	expected_s = "Str"
+	if actual_s != expected_s {
+		t.Errorf(format, expected_s, "base stat", actual_s)
+	}
+
+	actual = damage.Max()
+	expected = 9
+	if actual != expected {
+		t.Errorf(format, expected, "damage max", actual)
+	}
+
+	whazit := "Str+2d4-1"
+
+	damage, err = ParseDamage(whazit)
+	if err != nil {
+		t.Errorf("parsing %s, error: %v", whazit, err)
+	}
+
+	actual = damage.damage_bonus
+	expected = -1
+	if actual != expected {
+		t.Errorf(format, expected, "damage bonus", actual)
+	}
+
+	actual = damage.dice_count
+	expected = 2
+	if actual != expected {
+		t.Errorf(format, expected, "dice count", actual)
+	}
+
+	actual = damage.dice_sides
+	expected = 4
+	if actual != expected {
+		t.Errorf(format, expected, "dice sides", actual)
+	}
+
+	actual_s = damage.base_stat
+	expected_s = "Str"
+	if actual_s != expected_s {
+		t.Errorf(format, expected_s, "base stat", actual_s)
+	}
+
+	actual = damage.Max()
+	expected = 7
+	if actual != expected {
+		t.Errorf(format, expected, "damage max", actual)
 	}
 }
 
@@ -51,5 +145,31 @@ func TestDamageMax(t *testing.T) {
 	d2m := d2.Max()
 	if d2m != 8 {
 		t.Errorf("expected '8' but got %s", d2m)
+	}
+}
+
+func TestRoundTripDamage(t *testing.T) {
+
+	format := "expected %v for %s but found %v"
+
+	expected := "2d6"
+	damage, _ := ParseDamage(expected)
+	actual := damage.String()
+	if expected != actual {
+		t.Errorf(format, expected, "round.trip.2d6", actual)
+	}
+
+	expected = "2d6+1"
+	damage, _ = ParseDamage(expected)
+	actual = damage.String()
+	if expected != actual {
+		t.Errorf(format, expected, "round.trip.2d6+1", actual)
+	}
+
+	expected = "Str+d8"
+	damage, _ = ParseDamage(expected)
+	actual = damage.String()
+	if expected != actual {
+		t.Errorf(format, expected, "round.trip.Str+d8", actual)
 	}
 }

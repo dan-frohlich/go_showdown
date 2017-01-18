@@ -1,6 +1,7 @@
 package item
 
 import (
+	"encoding/json"
 	"github.com/ghodss/yaml"
 	"testing"
 )
@@ -36,14 +37,14 @@ RoF: 3
 		t.Errorf(format, expected, "cost", actual)
 	}
 
-	expected_s := "0-00-000-0"
-	actual_s := pi3.ID()
-	if expected_s != actual_s {
-		t.Errorf(format, expected_s, "id", actual_s)
+	var expected_id ID = "0-00-000-0"
+	actual_id := pi3.ID()
+	if expected_id != actual_id {
+		t.Errorf(format, expected_id, "id", actual_id)
 	}
 
-	expected_s = "pistol"
-	actual_s = pi3.Name()
+	expected_s := "pistol"
+	actual_s := pi3.Name()
 	if expected_s != actual_s {
 		t.Errorf(format, expected_s, "name", actual_s)
 	}
@@ -67,7 +68,7 @@ RoF: 3
 	}
 
 	expected_s = "2d6"
-	actual_s = pi3.Damage_.String()
+	actual_s = pi3.Damage().String()
 	if expected_s != actual_s {
 		t.Errorf(format, expected_s, "damage", actual_s)
 	}
@@ -79,7 +80,7 @@ RoF: 3
 	}
 
 	expected = 12
-	actual = pi3.Damage_.Max()
+	actual = pi3.Damage().Max()
 	if expected != actual {
 		t.Errorf(format, expected, "max damage", actual)
 	}
@@ -91,7 +92,7 @@ RoF: 3
 	}
 
 	expected_s = "12/24/48"
-	actual_s = pi3.Range_.String()
+	actual_s = pi3.Range().String()
 	if expected_s != actual_s {
 		t.Errorf(format, expected_s, "range fields", actual_s)
 	}
@@ -102,4 +103,69 @@ RoF: 3
 		t.Errorf(format, expected, "RoF", actual)
 	}
 
+}
+
+func TestRoundTripRangedWeapon(t *testing.T) {
+
+	src_yml := `
+id: 0-00-000-0
+name: sword
+description: atypical sword
+notes: a note
+special_cost: 6
+cost: 2
+AP: 3
+damage: Str+d6+1
+range: 12/24/48
+rof: 1
+`
+	hw := &RangedWeapon{}
+	//log.Printf("unmarshaling a hand weapon...\n")
+	pi3_umerror := yaml.Unmarshal([]byte(src_yml), hw)
+	if pi3_umerror != nil {
+		t.Error(pi3_umerror)
+	}
+	//log.Printf("unmarshaled a hand weapon as %v\n", hw)
+
+	json_str, _ := json.Marshal(hw)
+	hw2 := &RangedWeapon{}
+	json.Unmarshal(json_str, hw2)
+
+	format := "expected %v for %s but found %v"
+
+	expected := hw.Cost()
+	actual := hw2.Cost()
+	if expected != actual {
+		t.Errorf(format, expected, "cost", actual)
+	}
+
+	expected_s := hw.Damage().String()
+	actual_s := hw2.Damage().String()
+	if expected_s != actual_s {
+		t.Errorf(format, expected_s, "max damage", actual_s)
+	}
+
+	expected = hw.Damage().Max()
+	actual = hw2.Damage().Max()
+	if expected != actual {
+		t.Errorf(format, expected, "max damage", actual)
+	}
+
+	expected = hw.ArmorPiercing()
+	actual = hw2.ArmorPiercing()
+	if expected != actual {
+		t.Errorf(format, expected, "AP", actual)
+	}
+
+	expected = hw.Range().Short()
+	actual = hw2.Range().Short()
+	if expected != actual {
+		t.Errorf(format, expected, "range short", actual)
+	}
+
+	expected = hw.RateOfFire()
+	actual = hw2.RateOfFire()
+	if expected != actual {
+		t.Errorf(format, expected, "RoF", actual)
+	}
 }

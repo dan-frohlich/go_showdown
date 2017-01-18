@@ -9,4 +9,3 @@ type Armor struct {
 func (a *Armor) Armor() int { return a.Armor_ }
 
 func (a *Armor) Parry() int { return a.Parry_ }
-

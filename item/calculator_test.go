@@ -11,8 +11,8 @@ func TestHandWeaponCalculations(t *testing.T) {
 	//https://s3-us-west-2.amazonaws.com/peg-freebies/ShowdownTroopBuilder.xls
 	dagger := HandWeapon{
 		Weapon: Weapon{
-			Item:    Item{Name_: "Dagger"},
-			Damage_: Damage{dice_sides: 4, dice_count: 1},
+			Item:    Item{Element: Element{Name_: "Dagger"}},
+			Damage_: "1d4",
 			AP_:     0}}
 	actual := c.CalculateHandWeaponCost(dagger)
 	expected := 3
@@ -22,8 +22,8 @@ func TestHandWeaponCalculations(t *testing.T) {
 
 	gs := HandWeapon{
 		Weapon: Weapon{
-			Item:    Item{Name_: "Great Sword"},
-			Damage_: Damage{dice_sides: 10, dice_count: 1},
+			Item:    Item{Element: Element{Name_: "Great Sword"}},
+			Damage_: "1d10",
 			AP_:     0}}
 	actual = c.CalculateHandWeaponCost(gs)
 	expected = 12
@@ -33,8 +33,8 @@ func TestHandWeaponCalculations(t *testing.T) {
 
 	ls := HandWeapon{
 		Weapon: Weapon{
-			Item:    Item{Name_: "Laser Sword"},
-			Damage_: Damage{dice_sides: 6, damage_bonus: 8, dice_count: 1},
+			Item:    Item{Element: Element{Name_: "Laser Sword"}},
+			Damage_: "d6+8",
 			AP_:     12}}
 	actual = c.CalculateHandWeaponCost(ls)
 	expected = 54
@@ -44,10 +44,10 @@ func TestHandWeaponCalculations(t *testing.T) {
 
 	ga := HandWeapon{
 		Weapon: Weapon{
-			Item:    Item{Name_: "Great Axe"},
-			Damage_: Damage{dice_sides: 10, dice_count: 1},
+			Item:    Item{Element: Element{Name_: "Great Axe"}},
+			Damage_: "1d10",
 			AP_:     1},
-		Parry_: -1 }
+		Parry_: -1}
 
 	expected = 11
 	actual = c.CalculateHandWeaponCost(ga)
@@ -57,8 +57,8 @@ func TestHandWeaponCalculations(t *testing.T) {
 
 	flail := HandWeapon{
 		Weapon: Weapon{
-			Item:    Item{Name_: "Flail", SpecialCost_: 3 },
-			Damage_: Damage{dice_sides: 6, dice_count: 1} }}
+			Item:    Item{Element: Element{Name_: "Flail"}, SpecialCost_: 3},
+			Damage_: "1d6"}}
 
 	expected = 9
 	actual = c.CalculateHandWeaponCost(flail)
@@ -68,10 +68,10 @@ func TestHandWeaponCalculations(t *testing.T) {
 
 	lance := HandWeapon{
 		Weapon: Weapon{
-			Item:    Item{Name_: "Lance", SpecialCost_: -3 },
-			Damage_: Damage{dice_sides: 8, dice_count: 1},
-			AP_:     2 },
-		Reach_:2}
+			Item:    Item{Element: Element{Name_: "Lance"}, SpecialCost_: -3},
+			Damage_: "1d8",
+			AP_:     2},
+		Reach_: 2}
 
 	expected = 14
 	actual = c.CalculateHandWeaponCost(lance)
@@ -87,10 +87,10 @@ func TestRangedWeaponCalculations(t *testing.T) {
 
 	rw := RangedWeapon{
 		Weapon: Weapon{
-			Item:    Item{Name_: "Bazooka", SpecialCost_:10},
-			Damage_: Damage{dice_sides: 8, dice_count: 4},
-			AP_:     9 },
-		Range_: Range{short:96},
+			Item:    Item{Element: Element{Name_: "Bazooka"}, SpecialCost_: 10},
+			Damage_: "4d8",
+			AP_:     9},
+		_range: Range{short: 96},
 		RoF_:   1}
 	actual := c.CalculateRangedWeaponCost(rw)
 	expected := 78 //77
@@ -100,10 +100,10 @@ func TestRangedWeaponCalculations(t *testing.T) {
 
 	rw = RangedWeapon{
 		Weapon: Weapon{
-			Item:    Item{Name_: "Kentucky Rifle (.45)" },
-			Damage_: Damage{dice_sides: 8, dice_count: 2},
-			AP_:     2 },
-		Range_: Range{short:15},
+			Item:    Item{Element: Element{Name_: "Kentucky Rifle (.45)"}},
+			Damage_: "2d8",
+			AP_:     2},
+		_range: Range{short: 15},
 		RoF_:   1}
 	actual = c.CalculateRangedWeaponCost(rw)
 	expected = 17
@@ -119,9 +119,9 @@ func TestArmorCalculations(t *testing.T) {
 	format := "expected %v for %s but found %v"
 
 	a := Armor{
-		Item:   Item{Name_:"Shield Large", SpecialCost_:1},
+		Item:   Item{Element: Element{Name_: "Shield Large"}, SpecialCost_: 1},
 		Armor_: 2,
-		Parry_: 2 }
+		Parry_: 2}
 
 	actual := c.CalculateArmorCost(a)
 	expected := 8

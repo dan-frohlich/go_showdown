@@ -9,7 +9,7 @@ import (
 
 func TestItemReadWrite(t *testing.T) {
 
-	pi := &Item{Name_: "pitem", Cost_: 0}
+	pi := &Item{Element: Element{Name_: "pitem"}, Cost_: 0}
 	pij, imerr := json.Marshal(pi)
 
 	if imerr != nil {
@@ -47,8 +47,10 @@ cost: 101
 		t.Errorf(format, 101, "cost", pi3.Cost())
 	}
 
-	if "0-00-000-0" != pi3.ID() {
-		t.Errorf(format, "0-00-000-0", "id", pi3.ID())
+	var expected_id ID = "0-00-000-0"
+	actual_id := pi3.ID()
+	if expected_id != actual_id {
+		t.Errorf(format, expected_id, "id", actual_id)
 	}
 
 	if "pitem" != pi3.Name() {

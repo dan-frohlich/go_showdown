@@ -1,8 +1,8 @@
 package item
 
 import (
-	"log"
 	"encoding/json"
+	"log"
 	//"errors"
 	"errors"
 	"fmt"
@@ -12,7 +12,7 @@ import (
 type RangedWeapon struct {
 	Weapon
 	Range_ Range `json:"range" yaml:"range"`
-	RoF_   int `json:"RoF" yaml:"RoF"`
+	RoF_   int   `json:"RoF" yaml:"RoF"`
 }
 
 //Ranged
@@ -28,8 +28,8 @@ func (u *RangedWeapon) MarshalJSON() ([]byte, error) {
 		Range_ string `json:"range"`
 		*Alias
 	}{
-		Range_:          u.Range_.String(),
-		Alias:           (*Alias)(u),
+		Range_: u.Range_.String(),
+		Alias:  (*Alias)(u),
 	})
 
 	//log.Printf("marshaled %v, %v\n", string(b), e)

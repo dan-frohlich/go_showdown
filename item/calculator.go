@@ -4,18 +4,22 @@ import (
 	"math"
 )
 
-type WeaponCalculator interface {
-	CalculateWeaponCost(w Weapon) int
+type HandWeaponCalculator interface {
+	CalculateHandWeaponCost(w HandWeapon) int
 }
 
 type RangedWeaponCalculator interface {
 	CalculateRangedWeaponCost(w RangedWeapon) int
 }
 
+type ArmorCalculator interface {
+	CalculateArmorCost(a Armor) int
+}
+
 type Showdown2009Calculator struct {
 }
 
-func (c Showdown2009Calculator) CalculateWeaponCost(w Weapon) int {
+func (c Showdown2009Calculator) CalculateHandWeaponCost(w HandWeapon) int {
 	// extracted from troop builder spreadsheet...
 	//B Damage
 	//C Dam Bonus
@@ -29,9 +33,11 @@ func (c Showdown2009Calculator) CalculateWeaponCost(w Weapon) int {
 	B := damage.dice_count * damage.dice_sides
 	C := damage.damage_bonus
 	D := w.ArmorPiercing()
-	E := 0 //todo support reach !?!
-	F := 0 //todo support parry
-	H := 0 //todo support special
+	E := w.Reach()
+	F := w.Parry()
+	H := w.SpecialCost()
+	//log.Printf("cost for hand weapon [%s] B:%d C:%d D:%d E:%d F:%d H:%d",
+	//	w.Name(), B, C, D, E, F, H)
 	return ((B/2)-1)*3 + 3*C + 2*D + E*2 + F*3 + H
 
 	//Cost	Special
@@ -57,13 +63,15 @@ func (c Showdown2009Calculator) CalculateRangedWeaponCost(w RangedWeapon) int {
 	C := w.Damage().Max()
 	D := w.RateOfFire()
 	E := w.ArmorPiercing()
-	F := 0 //special?!?!
+	F := w.SpecialCost()
 	G := 0 //only 1 shot?!?
 	oneShotFactor := 1.0
 	if G == 1 {
 		oneShotFactor = 0.16
 	}
-	baseCost := (2 + (B / 6)) + (C - 10) + ((D - 1) * 10) + (E * 3) + F
+	//log.Printf("cost for ranged weapon [%s] B:%d (B/6):%d C:%d D:%d E:%d F:%d",
+	//	w.Name(), B, roundToInt((float64(B) / float64(6)) +.5), C, D, E, F)
+	baseCost := (2 + roundToInt((float64(B) / float64(6)) + .5) ) + (C - 10) + ((D - 1) * 10) + (E * 3) + F
 	return roundToInt(float64(baseCost) * oneShotFactor)
 
 	//Cost	Special Modifier
@@ -76,4 +84,17 @@ func (c Showdown2009Calculator) CalculateRangedWeaponCost(w RangedWeapon) int {
 	//15	Cone Template
 	//20	Heavy Weapon
 	//-10	Fixed Weapon
+}
+
+func (c Showdown2009Calculator) CalculateArmorCost(a Armor) int {
+	//B Armor
+	//C Parry
+	//D Special
+
+	//(B10+(C10×3))×D10
+	B := a.Armor()
+	C := a.Parry()
+	D := a.SpecialCost()
+
+	return B + (C*3)*D
 }

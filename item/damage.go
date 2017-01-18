@@ -27,7 +27,7 @@ func (d Damage) Prefix() string {
 	if d.base_stat != "" {
 		return d.base_stat + "+"
 	} else {
-		return "";
+		return ""
 	}
 }
 
@@ -37,7 +37,7 @@ func (d Damage) Suffix() string {
 	} else if d.damage_bonus < 0 {
 		return fmt.Sprintf("%d", d.damage_bonus)
 	} else {
-		return "";
+		return ""
 	}
 }
 

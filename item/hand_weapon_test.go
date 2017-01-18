@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestRangedWeaponReadYaml(t *testing.T) {
+func TestHanmdWeaponReadYaml(t *testing.T) {
 	//t.Skip("skipping test;")
 
 	//log.Printf("running TestRangedWeaponReadYaml")
@@ -15,22 +15,24 @@ name: pistol
 description: atypical pistol
 notes: a note
 special_cost: 6
-cost: 1
-AP: 2
+cost: 2
+AP: 3
 damage: 2d6
-range: 12/24/48
-RoF: 3
+parry: 4
+reach: 5
 `
 
-	pi3 := &RangedWeapon{}
+	pi3 := &HandWeapon{}
+	//log.Printf("unmarshaling a hand weapon...\n")
 	pi3_umerror := yaml.Unmarshal([]byte(src_yml), pi3)
 	if pi3_umerror != nil {
 		t.Error(pi3_umerror)
 	}
+	//log.Printf("unmarshaled a hand weapon as %v\n", pi3)
 
 	format := "expected %v for %s but found %v"
 
-	expected := 1
+	expected := 2
 	actual := pi3.Cost()
 	if expected != actual {
 		t.Errorf(format, expected, "cost", actual)
@@ -54,25 +56,19 @@ RoF: 3
 		t.Errorf(format, expected_s, "description", actual_s)
 	}
 
-	expected_s = "a note"
-	actual_s = pi3.Notes()
-	if expected_s != actual_s {
-		t.Errorf(format, expected_s, "notes", actual_s)
-	}
-
-	expected = 6
-	actual = pi3.SpecialCost()
-	if expected != actual {
-		t.Errorf(format, expected, "special_cost", actual)
-	}
-
 	expected_s = "2d6"
 	actual_s = pi3.Damage_.String()
 	if expected_s != actual_s {
 		t.Errorf(format, expected_s, "damage", actual_s)
 	}
 
-	expected = 2
+	expected_s = "a note"
+	actual_s = pi3.Notes()
+	if expected_s != actual_s {
+		t.Errorf(format, expected_s, "notes", actual_s)
+	}
+
+	expected = 3
 	actual = pi3.ArmorPiercing()
 	if expected != actual {
 		t.Errorf(format, expected, "AP", actual)
@@ -84,22 +80,22 @@ RoF: 3
 		t.Errorf(format, expected, "max damage", actual)
 	}
 
-	expected = 12
-	actual = pi3.Range().Short()
+	expected =4
+	actual = pi3.Parry()
 	if expected != actual {
-		t.Errorf(format, expected, "short range", actual)
+		t.Errorf(format, expected, "parry", actual)
 	}
 
-	expected_s = "12/24/48"
-	actual_s = pi3.Range_.String()
-	if expected_s != actual_s {
-		t.Errorf(format, expected_s, "range fields", actual_s)
+	expected = 5
+	actual = pi3.Reach()
+	if expected != actual {
+		t.Errorf(format, expected, "reach", actual)
 	}
 
-	expected = 3
-	actual = pi3.RateOfFire()
+	expected = 6
+	actual = pi3.SpecialCost()
 	if expected != actual {
-		t.Errorf(format, expected, "RoF", actual)
+		t.Errorf(format, expected, "special_cost", actual)
 	}
 
 }

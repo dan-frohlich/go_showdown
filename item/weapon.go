@@ -1,14 +1,14 @@
 package item
 
 import (
-	"log"
 	"encoding/json"
+	"log"
 )
 
 type Weapon struct {
 	Item
 	Damage_ Damage `json:"damage" yaml:"damage"`
-	AP_ int `json:"AP" yaml:"AP"`
+	AP_     int    `json:"AP" yaml:"AP"`
 }
 
 //Damaging
@@ -24,8 +24,8 @@ func (u *Weapon) MarshalJSON() ([]byte, error) {
 		Damage_ string `json:"damage"`
 		*Alias
 	}{
-		Damage_:      u.Damage_.String(),
-		Alias:        (*Alias)(u),
+		Damage_: u.Damage_.String(),
+		Alias:   (*Alias)(u),
 	})
 
 	//log.Printf("marshaled %v, %v\n", string(b), e)
@@ -59,4 +59,3 @@ func (u *Weapon) UnmarshalJSON(data []byte) error {
 	u.Damage_ = d
 	return nil
 }
-

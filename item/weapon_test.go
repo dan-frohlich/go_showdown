@@ -1,16 +1,16 @@
 package item
 
 import (
-	"testing"
 	"encoding/json"
 	"github.com/ghodss/yaml"
+	"testing"
 )
 
 func TestWeaponReadWrite(t *testing.T) {
 
 	pi := &Weapon{
-		Item:   Item{Name_:  "pitem", Cost_:0},
-		Damage_:Damage{dice_count:1, dice_sides:6, base_stat:"Str"} }
+		Item:    Item{Name_: "pitem", Cost_: 0},
+		Damage_: Damage{dice_count: 1, dice_sides: 6, base_stat: "Str"}}
 	pij, imerr := json.Marshal(pi)
 
 	if imerr != nil {
@@ -47,31 +47,46 @@ AP: 111
 	}
 
 	format := "expected %v for %s but found %v"
-	if 101 != pi3.Cost() {
-		t.Errorf(format, 101, "cost", pi3.Cost())
+
+	expected := 101
+	actual := pi3.Cost()
+	if expected != actual {
+		t.Errorf(format, expected, "cost", actual)
 	}
 
-	if "0-00-000-0" != pi3.ID() {
-		t.Errorf(format, "0-00-000-0", "id", pi3.ID())
+	expected_s := "0-00-000-0"
+	actual_s := pi3.ID()
+	if expected_s != actual_s {
+		t.Errorf(format, expected_s, "id", actual_s)
 	}
 
-	if "pitem" != pi3.Name() {
-		t.Errorf(format, "pitem", "name", pi3.Name())
+	expected_s = "pitem"
+	actual_s = pi3.Name()
+	if expected_s != actual_s {
+		t.Errorf(format, expected_s, "name", actual_s)
 	}
 
-	if "pidescr" != pi3.Description() {
-		t.Errorf(format, "pidescr", "description", pi3.Description())
+	expected_s = "pidescr"
+	actual_s = pi3.Description()
+	if expected_s != actual_s {
+		t.Errorf(format, expected_s, "description", actual_s)
 	}
 
-	if "2d6" != pi3.Damage_.String() {
-		t.Errorf(format, "2d6", "damage", pi3.Damage_.String())
+	expected_s = "2d6"
+	actual_s = pi3.Damage_.String()
+	if expected_s != actual_s {
+		t.Errorf(format, expected_s, "damage", actual_s)
 	}
 
-	if 111 != pi3.ArmorPiercing() {
-		t.Errorf(format, 111, "AP", pi3.ArmorPiercing())
+	expected = 111
+	actual = pi3.ArmorPiercing()
+	if expected != actual {
+		t.Errorf(format, expected, "AP", actual)
 	}
 
-	if 12 != pi3.Damage_.Max() {
-		t.Errorf(format, 12, "max damage", pi3.Damage_.Max())
+	expected = 12
+	actual = pi3.Damage_.Max()
+	if expected != actual {
+		t.Errorf(format, expected, "max damage", actual)
 	}
 }

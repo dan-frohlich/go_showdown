@@ -1,15 +1,15 @@
 package item
 
 import (
-	"testing"
 	"encoding/json"
+	"testing"
 
 	"github.com/ghodss/yaml"
 )
 
 func TestItemReadWrite(t *testing.T) {
 
-	pi := &Item{Name_:"pitem", Cost_:0}
+	pi := &Item{Name_: "pitem", Cost_: 0}
 	pij, imerr := json.Marshal(pi)
 
 	if imerr != nil {

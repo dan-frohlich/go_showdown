@@ -5,17 +5,35 @@ import (
 	"fmt"
 	"github.com/ghodss/yaml"
 	"log"
-	"showdown/item"
 	"testing"
+	"showdown/identity"
 )
 
 func TestCharacterParse(t *testing.T) {
 
 	src_yml := `
-id: leg.o.lamb.elf.archer
+id: showdown.v2009.character.leg.o.lamb.elf.archer
 name: Leg O'Lamb
 description: Elf archer
 notes: snowboarder
+edges:
+  showdown.v2009.edge.quick:
+    id: showdown.v2009.edge.quick
+    name: Quick
+    description: >-
+      The unit cannot have an action card lower than 5
+      (discard and redeal until this is true)
+hinderances:
+powers:
+  showdown.v2009.power.quickness:
+    id: showdown.v2009.power.quickness
+    name: quickness
+    description: >-
+      Quickness grants a figure incredible celerity and clarity of thought.
+      With success, the target has two actions per round instead of the usual one
+      (at no multi- action penalty).
+      With a raise, the recipient gains the bene ts above, and can also discard
+      and redraw any initiative cards lower than 8 each round.
 attributes:
   showdown.v2009.attribute.agility:
     id: showdown.v2009.attribute.agility
@@ -96,7 +114,7 @@ hand_weapons:
 	if expected_s != actual_s {
 		t.Errorf(format, expected_s, "char.name", actual_s)
 	}
-	var knife_id item.ID = "showdown.v2009.hand.knife"
+	var knife_id identity.ID = "showdown.v2009.hand.knife"
 	actual := a.HandWeapons_[knife_id].Count_
 	expected := 2
 	if expected != actual {
@@ -113,7 +131,7 @@ hand_weapons:
 	bytes, _ := json.Marshal(a)
 	fmt.Println(string(bytes))
 
-	var shooting_id item.ID = "showdown.v2009.skill.shooting"
+	var shooting_id identity.ID = "showdown.v2009.skill.shooting"
 	shooting_skill := a.Skills_[shooting_id]
 	actual_id := shooting_skill.ID()
 	expected_id := shooting_id

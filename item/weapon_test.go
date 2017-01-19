@@ -5,6 +5,7 @@ import (
 	"github.com/ghodss/yaml"
 	"log"
 	"testing"
+	"showdown/identity"
 )
 
 func TestWeaponReadWrite(t *testing.T) {
@@ -55,7 +56,7 @@ AP: 111
 		t.Errorf(format, expected, "cost", actual)
 	}
 
-	var expected_id ID = "0-00-000-0"
+	var expected_id identity.ID = "0-00-000-0"
 	actual_id := pi3.ID()
 	if expected_id != actual_id {
 		t.Errorf(format, expected_id, "id", actual_id)

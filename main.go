@@ -118,4 +118,8 @@ hand_weapons:
 		fmt.Println(string(string_char))
 	}
 
+	//l := library.GetLibrary()
+	//fmt.Println(l.Attributes)
 }
+
+

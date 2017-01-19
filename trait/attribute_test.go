@@ -3,8 +3,8 @@ package trait
 import (
 	"github.com/ghodss/yaml"
 	"log"
-	"showdown/item"
 	"testing"
+	"showdown/identity"
 )
 
 func TestAttributeParse(t *testing.T) {
@@ -27,7 +27,7 @@ level: 1
 
 	format := "expected %v for %s but found %v"
 
-	var expected_id item.ID = "core.deluxe.attribute.strength"
+	var expected_id identity.ID = "core.deluxe.attribute.strength"
 	actual_id := pi3.ID()
 	if expected_id != actual_id {
 		t.Errorf(format, expected_id, "id", actual_id)

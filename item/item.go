@@ -1,9 +1,11 @@
 package item
 
-type ID string
+import (
+	"showdown/identity"
+)
 
 type Element struct {
-	ID_          ID     `json:"id" yaml:"id"`
+	ID_          identity.ID `json:"id" yaml:"id"`
 	Name_        string `json:"name" yaml:"name"`
 	Short_Name_  string `json:"short_name" yaml:"short_name"`
 	Description_ string `json:"description" yaml:"description"`
@@ -18,7 +20,7 @@ type Item struct {
 }
 
 //Identifiable
-func (i *Element) ID() ID { return i.ID_ }
+func (i *Element) ID() identity.ID { return i.ID_ }
 
 //Named
 func (i *Element) Name() string { return i.Name_ }

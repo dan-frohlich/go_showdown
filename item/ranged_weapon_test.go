@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/ghodss/yaml"
 	"testing"
+	"showdown/identity"
 )
 
 func TestRangedWeaponReadYaml(t *testing.T) {
@@ -37,7 +38,7 @@ RoF: 3
 		t.Errorf(format, expected, "cost", actual)
 	}
 
-	var expected_id ID = "0-00-000-0"
+	var expected_id identity.ID = "0-00-000-0"
 	actual_id := pi3.ID()
 	if expected_id != actual_id {
 		t.Errorf(format, expected_id, "id", actual_id)
